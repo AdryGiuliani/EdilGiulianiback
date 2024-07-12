@@ -27,6 +27,10 @@ public @Data class Cliente {
     private String tel;
     private String nome;
     private String cognome;
+    private boolean isAzienda=false;
+    private String cf;
+    private String piva;
+    private String codUnivoco;
 
     @OneToMany(mappedBy = "cliente_p", cascade = CascadeType.ALL)
     private List<Prenotazione> prenotazioni = new ArrayList<>();
