@@ -3,6 +3,7 @@ package com.piattaforme.edilgiulianiback.services;
 import com.piattaforme.edilgiulianiback.entities.Cliente;
 import com.piattaforme.edilgiulianiback.repository.RepoClienti;
 import com.piattaforme.edilgiulianiback.utils.exceptions.MailAlreadyExistsException;
+import com.piattaforme.edilgiulianiback.utils.utility.Utils;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class ClientService {
     @Autowired
     private RepoClienti repoClienti;
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public Cliente registraCliente(@NotNull Cliente user) throws MailAlreadyExistsException {
         if ( repoClienti.existsByEmail(user.getEmail())) {
             throw new MailAlreadyExistsException("Email già presente nel sistema");
@@ -28,5 +29,9 @@ public class ClientService {
     @Transactional(readOnly = true)
     public List<Cliente> getAllUsers() {
         return repoClienti.findAll();
+    }
+
+    public String test(int id){
+        return "test ok"+id+" "+Utils.getEmail();
     }
 }

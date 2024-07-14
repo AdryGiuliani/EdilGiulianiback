@@ -23,7 +23,6 @@ public @Data class Cliente {
 
     @Column(nullable = false, unique = true)
     private String email;
-    private String password;
     private String tel;
     private String nome;
     private String cognome;
