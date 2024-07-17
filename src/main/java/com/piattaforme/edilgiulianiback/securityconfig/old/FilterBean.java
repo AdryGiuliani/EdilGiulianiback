@@ -1,10 +1,9 @@
-package com.piattaforme.edilgiulianiback.securityconfig;
+package com.piattaforme.edilgiulianiback.securityconfig.old;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 
 public class FilterBean {
-    @Bean
+    //@Bean
     public FilterRegistrationBean<CompletedRegistrationFilter> loggingFilter(){
         FilterRegistrationBean<CompletedRegistrationFilter> registrationBean
                 = new FilterRegistrationBean<>();

@@ -18,7 +18,8 @@ public @Data class Preventivo {
     @Temporal(TemporalType.DATE)
     private Date dataCreazione;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn
-    private Cliente cliente_c;
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumn
+//    private Cliente cliente_c;
+    private String clienteID;
 }

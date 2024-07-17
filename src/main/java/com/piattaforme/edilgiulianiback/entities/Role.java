@@ -10,7 +10,7 @@ enum Ruolo{
     GUEST,CUSTOMER,ADMIN
 }
 
-@Entity
+//@Entity
 public @Data class Role {
 
     @Id

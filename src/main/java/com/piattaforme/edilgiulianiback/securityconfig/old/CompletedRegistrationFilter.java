@@ -1,16 +1,13 @@
-package com.piattaforme.edilgiulianiback.securityconfig;
+package com.piattaforme.edilgiulianiback.securityconfig.old;
 
 
 import com.piattaforme.edilgiulianiback.utils.utility.Utils;
 import jakarta.servlet.*;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Iterator;
 
-@Component
+//@Component
 @Order(1)
 public class CompletedRegistrationFilter implements Filter {
 

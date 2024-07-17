@@ -19,9 +19,10 @@ public @Data class Prenotazione {
 
     private int oreLavoro;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
-    private Cliente cliente_p;
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn
+//    private Cliente cliente_p;
+    private String clienteID;
 
     @Lob
     @Column(columnDefinition = "TEXT")
