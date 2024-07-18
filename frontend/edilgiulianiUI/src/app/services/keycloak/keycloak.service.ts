@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Keycloak from "keycloak-js";
+import Keycloak, {KeycloakProfile} from "keycloak-js";
 import {UserProfile} from "./user-profile";
 
 @Injectable({
@@ -8,9 +8,9 @@ import {UserProfile} from "./user-profile";
 export class KeycloakService{
 
   private _keycloak: Keycloak | undefined;
-  private _profile: UserProfile | undefined;
+  private _profile: KeycloakProfile | undefined;
 
-  get profile(): UserProfile|undefined {
+  get profile(): KeycloakProfile|undefined {
     return this._profile;
   }
   get keycloak(){
@@ -30,10 +30,11 @@ export class KeycloakService{
     const authenticated = await this.keycloak.init({
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
-      checkLoginIframe: false
+      checkLoginIframe: false,
+      redirectUri: window.location.origin + '/dashboard'
     });
     if (authenticated){
-      this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
+      this._profile = (await this.keycloak?.loadUserProfile());
     }
   }
 

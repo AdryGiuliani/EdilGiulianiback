@@ -1,15 +1,18 @@
-<p>homepage works!</p>
-<div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Email address</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-</div>
-<div class="mb-3">
-  <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-</div>
-<button (click)="logout()">LOGOUT</button>
-<button (click)="getUserId()">doRequest</button>
-<button (click)="test()">doRequestGPT</button>
+<p-card>
+  <p-menubar [model]="items">
+    <ng-template pTemplate="start">
+      <div class="flex align-items-center">
+        <p-avatar image="favicon.ico"/>
+      </div>
+    </ng-template>
 
 
+<ng-template pTemplate="end">
+  <div class="flex justify-content-end align-items-center">
+    <h3>Benvenuto, {{user}}</h3>
+    <p-button (click)="logout()" severity="danger" [rounded]="true">Logout</p-button>
+  </div>
+</ng-template>
+  </p-menubar>
+</p-card>
 <p>{{res}}</p>
