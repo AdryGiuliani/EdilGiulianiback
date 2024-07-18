@@ -5,7 +5,7 @@ import {UserProfile} from "./user-profile";
 @Injectable({
   providedIn: 'root'
 })
-export class KeycloakService {
+export class KeycloakService{
 
   private _keycloak: Keycloak | undefined;
   private _profile: UserProfile | undefined;
@@ -26,9 +26,11 @@ export class KeycloakService {
   constructor() { }
 
   async init(): Promise<void> {
-    console.log("authenticating user")
-    const authenticated = await this.keycloak?.init({
-      onLoad: 'login-required'
+    console.log("init keycloak service")
+    const authenticated = await this.keycloak.init({
+      onLoad: 'check-sso',
+      silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+      checkLoginIframe: false
     });
     if (authenticated){
       this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
@@ -36,10 +38,10 @@ export class KeycloakService {
   }
 
   login(){
-    return this.keycloak?.login();
+    return this.keycloak.login();
   }
 
   logout(){
-    return this.keycloak?.logout({redirectUri: 'http://localhost:4200'});
+    return this.keycloak.logout({redirectUri: 'http://localhost:4200'});
   }
 }

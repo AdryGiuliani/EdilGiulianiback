@@ -2,6 +2,7 @@ package com.piattaforme.edilgiulianiback.controllers;
 
 
 import com.piattaforme.edilgiulianiback.services.ClientService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +28,13 @@ public class TestController{
             return ResponseEntity.ok("utente non loggato");
         }
         else
-            return ResponseEntity.ok(clientService.test(productId, connectedUser.getName()));
+            return ResponseEntity.ok(clientService.test(productId, connectedUser.getPrincipal().toString()));
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_user')")
+    @GetMapping("/test2/{productId}")
+    public ResponseEntity<Integer> testInt(@PathVariable int productId, Authentication connectedUser){
+        return ResponseEntity.ok(productId);
     }
 }
