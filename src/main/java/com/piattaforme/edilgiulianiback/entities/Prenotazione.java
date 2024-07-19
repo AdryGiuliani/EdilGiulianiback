@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public @Data class Prenotazione {
@@ -11,20 +12,21 @@ public @Data class Prenotazione {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Temporal(TemporalType.DATE)
-    private Date datainizio;
-
-    @Temporal(TemporalType.DATE)
-    private Date datafine;
-
     private int oreLavoro;
 
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn
-//    private Cliente cliente_p;
     private String clienteID;
+
+    private String indirizzo;
+
+    private String CAP;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date dataCreazione;
 
     @Lob
     @Column(columnDefinition = "TEXT")
     private String descrizione;
+
+    @OneToMany
+    private List<SubPrenotazione> subPrenotazioni;
 }

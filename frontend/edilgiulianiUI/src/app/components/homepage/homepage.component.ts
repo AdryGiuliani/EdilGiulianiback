@@ -72,7 +72,7 @@ export class HomepageComponent implements OnInit{
   items: MenuItem[] | undefined;
 
   ngOnInit() {
-    // @ts-ignore
+    // @ts-ignorea
     this.user = this.kcService.profile?.attributes["isAzienda"]
     this.items = [
       {
