@@ -5,12 +5,15 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public @Data class Prenotazione {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    private String nome;
 
     private int oreLavoro;
 
@@ -20,6 +23,8 @@ public @Data class Prenotazione {
 
     private String CAP;
 
+    private float prezzoStimato;
+
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date dataCreazione;
 
@@ -27,6 +32,17 @@ public @Data class Prenotazione {
     @Column(columnDefinition = "TEXT")
     private String descrizione;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<SubPrenotazione> subPrenotazioni;
+
+    public void calcolaPrezzo(){
+        float totPrice = 0; int totH = 0;
+        for (SubPrenotazione sp : subPrenotazioni){
+            int h = sp.orelavoro();
+            totH+=h;
+            totPrice+= sp.calcolaPrezzo();
+        }
+        this.prezzoStimato = totPrice;
+        this.oreLavoro = totH;
+    }
 }

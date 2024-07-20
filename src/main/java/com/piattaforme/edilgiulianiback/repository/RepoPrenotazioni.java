@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface RepoPrenotazioni extends JpaRepository<Prenotazione, Long> {
     List<Prenotazione> findAllByOrderByDataCreazioneDesc();
-
+    Prenotazione findById(long id);
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     @Override
     <S extends Prenotazione> S save(S entity);

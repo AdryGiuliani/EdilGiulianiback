@@ -13,6 +13,8 @@ public @Data class Mezzo {
     private String nome;
     private String descrizione;
     private float prezzo_hour;
+    private float minPrice;
+    private float dailyPrice;
     private boolean available;
 
     @OneToMany(mappedBy = "mezzo")

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public @Data class BookingDay {
+public @Data class BookingDay implements Comparable<BookingDay>{
     @Id
     @GeneratedValue
     private long id;
@@ -17,4 +17,20 @@ public @Data class BookingDay {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Interval> intervalliLavoro;
+
+
+    @Override
+    public int compareTo(BookingDay o) {
+        if (this.equals(o)) return 0;
+        if (this.getGiorno().before(o.getGiorno())) return 1;
+        return -1;
+    }
+
+    public int calcolaOre() {
+        int htot = 0;
+        for (Interval i : intervalliLavoro) {
+            htot += i.getHours();
+        }
+        return htot;
+    }
 }
