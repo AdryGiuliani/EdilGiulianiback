@@ -1,20 +1,24 @@
 package com.piattaforme.edilgiulianiback.services;
 
+import com.nimbusds.jose.shaded.gson.internal.bind.util.ISO8601Utils;
+import com.piattaforme.edilgiulianiback.controllers.IsoInterval;
 import com.piattaforme.edilgiulianiback.controllers.PrenotazioneRequest;
 import com.piattaforme.edilgiulianiback.entities.BookingDay;
 import com.piattaforme.edilgiulianiback.entities.Interval;
 import com.piattaforme.edilgiulianiback.entities.Prenotazione;
 import com.piattaforme.edilgiulianiback.entities.SubPrenotazione;
+import com.piattaforme.edilgiulianiback.repository.RepoBookingDay;
 import com.piattaforme.edilgiulianiback.repository.RepoPrenotazioni;
 import com.piattaforme.edilgiulianiback.repository.RepoSubPrenotazioni;
+import com.piattaforme.edilgiulianiback.utils.utility.IsoIntervalConverter;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -25,6 +29,9 @@ public class PrenotazioniService {
 
     @Autowired
     private RepoSubPrenotazioni repoSub;
+
+    @Autowired
+    private RepoBookingDay repobDay;
 
     @Autowired
     private PrenotazioniAssembler assembler;
@@ -122,4 +129,26 @@ public class PrenotazioniService {
     }
 
 
+    public List<IsoInterval> getPrenotazioniMezzoHours(long idmezzo, Date day) {
+        val res = new ArrayList<IsoInterval>();
+        val l = repobDay.findAllByIdMezzoAndDay(idmezzo, day);
+        l.forEach(
+                (BookingDay bd) -> bd.getIntervalliLavoro().forEach(
+                    (Interval i) -> res.add(IsoIntervalConverter.toIsoInterval(i))
+                )
+        );
+        return res;
+    }
+
+    @Transactional
+    public List<String> getPrenotazioniMezzoDaily(long idmezzo) {
+        val l = getRelevantBooked(idmezzo);
+        val res = new HashMap<String,Boolean>();
+        for (val sb : l){
+            for (val day : sb.getGiorni()){
+                res.putIfAbsent(ISO8601Utils.format(day.getGiorno(), false),true);
+            }
+        }
+        return res.keySet().stream().toList();
+    }
 }

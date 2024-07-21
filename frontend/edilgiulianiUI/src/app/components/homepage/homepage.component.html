@@ -1,18 +1,1 @@
-<p-card>
-  <p-menubar [model]="items">
-    <ng-template pTemplate="start">
-      <div class="flex align-items-center">
-        <p-avatar image="favicon.ico"/>
-      </div>
-    </ng-template>
 
-
-<ng-template pTemplate="end">
-  <div class="flex justify-content-end align-items-center">
-    <h3>Benvenuto, {{user}}</h3>
-    <p-button (click)="logout()" severity="danger" [rounded]="true">Logout</p-button>
-  </div>
-</ng-template>
-  </p-menubar>
-</p-card>
-<p>{{res}}</p>

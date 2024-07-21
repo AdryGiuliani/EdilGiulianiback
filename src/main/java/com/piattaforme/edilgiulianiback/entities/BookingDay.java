@@ -18,6 +18,9 @@ public @Data class BookingDay implements Comparable<BookingDay>{
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Interval> intervalliLavoro;
 
+    @ManyToOne
+    @JoinColumn(name = "Subp_id")
+    private SubPrenotazione subp;
 
     @Override
     public int compareTo(BookingDay o) {

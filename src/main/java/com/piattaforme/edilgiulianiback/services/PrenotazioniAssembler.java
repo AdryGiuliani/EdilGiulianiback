@@ -82,6 +82,7 @@ public class PrenotazioniAssembler {
             res.add(b);
         }
 
+        res.sort(null);
         return res;
     }
 

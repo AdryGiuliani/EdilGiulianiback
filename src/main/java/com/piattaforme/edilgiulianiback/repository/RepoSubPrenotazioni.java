@@ -15,4 +15,5 @@ public interface RepoSubPrenotazioni extends JpaRepository<SubPrenotazione, Long
 
     @Lock(value = LockModeType.PESSIMISTIC_READ)
     List<SubPrenotazione> findAllByMezzo_IdAndLastDayAfter(long id, Date date);
+    
 }

@@ -16,11 +16,15 @@ public @Data class SubPrenotazione {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_mezzo")
+    @JoinColumn(name = "Mezzo_id")
     private Mezzo mezzo;
 
     @Temporal(value = TemporalType.DATE)
     private Date lastDay;
+
+    @ManyToOne
+    @JoinColumn(name = "Prenotazione_id")
+    private Prenotazione p;
 
     private long margineTrasporto = TimeUnit.HOURS.toMillis(1);
 

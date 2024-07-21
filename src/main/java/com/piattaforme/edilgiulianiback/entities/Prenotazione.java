@@ -31,7 +31,7 @@ public @Data class Prenotazione {
     @Column(columnDefinition = "TEXT")
     private String descrizione;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<SubPrenotazione> subPrenotazioni;
 
     public void calcolaPrezzo(){
