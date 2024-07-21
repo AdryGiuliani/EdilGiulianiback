@@ -1,7 +1,6 @@
 package com.piattaforme.edilgiulianiback.securityconfig;
 
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.lang.NonNullApi;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

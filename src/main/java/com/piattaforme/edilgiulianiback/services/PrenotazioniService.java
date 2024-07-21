@@ -33,12 +33,16 @@ public class PrenotazioniService {
     private long newMargin;
 
     @Transactional
-    public boolean addPrenotazione(PrenotazioneRequest pr, boolean isAdmin, String userid) throws ParseException {
+    public PrenotazioneResponse addPrenotazione(PrenotazioneRequest pr, boolean isAdmin, String userid) throws ParseException {
         Prenotazione p = assembler.generatePrenotazione(pr, userid);
         if (!validatePrenotazione(p, isAdmin))
-            return assembler.genErrorResponse();
+            return getErrorResponse();
 
         return assembler.genPrenotaResponse(repo.save(p));
+    }
+
+    public PrenotazioneResponse getErrorResponse(){
+        return assembler.genErrorResponse();
     }
 
     private boolean validatePrenotazione(Prenotazione p, boolean isAdmin) {

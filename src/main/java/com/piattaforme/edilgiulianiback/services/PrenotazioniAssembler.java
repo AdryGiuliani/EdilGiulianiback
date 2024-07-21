@@ -10,11 +10,11 @@ import com.piattaforme.edilgiulianiback.entities.Prenotazione;
 import com.piattaforme.edilgiulianiback.entities.SubPrenotazione;
 import com.piattaforme.edilgiulianiback.repository.RepoMezzi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +62,7 @@ public class PrenotazioniAssembler {
         Map<Date, ArrayList<Interval>> ivals = new HashMap<>();
         for (IsoInterval iso : intervals){
             Interval i = isoToInterval(iso);
-            Date day = validateAndGetDay(i);
+            Date day = i.getDay();
             ArrayList<Interval> l = new ArrayList<>();
             if (!ivals.containsKey(day)){
                 l.add(i);
@@ -111,5 +111,42 @@ public class PrenotazioniAssembler {
         i.setHfine(cend.getTime());
 
         return i;
+    }
+
+    public PrenotazioneResponse genErrorResponse() {
+        return  new PrenotazioneResponse("Err", "0", "0", "0", new ArrayList<>(), 0);
+    }
+
+    public PrenotazioneResponse genPrenotaResponse(Prenotazione save) {
+        return new PrenotazioneResponse(
+                save.getNome(),
+                save.getIndirizzo(),
+                save.getCAP(),
+                save.getDescrizione(),
+                toSubBooking(save.getSubPrenotazioni()),
+                save.getPrezzoStimato()
+        );
+    }
+
+    private List<SubBooking> toSubBooking(List<SubPrenotazione> subPrenotazioni) {
+        List<SubBooking> res = new ArrayList<>();
+        for (SubPrenotazione sp : subPrenotazioni){
+            SubBooking sb = new SubBooking();
+            sb.setIdmezzo(sp.getMezzo().getId());
+            sb.setIntervals(toIsoIntervals(sp.getGiorni()));
+        }
+        return res;
+    }
+
+    private List<IsoInterval> toIsoIntervals(List<BookingDay> giorni) {
+        List<IsoInterval> res = new ArrayList<>();
+        for (BookingDay d : giorni){
+            for (Interval i : d.getIntervalliLavoro()){
+                IsoInterval iso = new IsoInterval();
+                iso.setStart(ISO8601Utils.format(i.getHstart()));
+                iso.setEnd(ISO8601Utils.format(i.getHfine()));
+            }
+        }
+        return res;
     }
 }

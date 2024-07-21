@@ -6,7 +6,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
 
-import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -49,5 +48,15 @@ public @Data class Interval implements  Comparable<Interval> {
         if ((hstart.before(lunchstart)||hstart.equals(lunchstart)) && (hfine.after(lunchend)||hfine.equals(lunchend)))
             diff--;
         return diff;
+    }
+
+    public Date getDay() {
+        Calendar cstart = Calendar.getInstance();
+        cstart.setTime(hstart);
+        cstart.set(Calendar.HOUR_OF_DAY, 0);
+        cstart.set(Calendar.MINUTE, 0);
+        cstart.set(Calendar.SECOND, 0);
+        cstart.set(Calendar.MILLISECOND, 0);
+        return  cstart.getTime();
     }
 }

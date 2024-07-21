@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import Keycloak, {KeycloakProfile} from "keycloak-js";
-import {UserProfile} from "./user-profile";
 
 @Injectable({
   providedIn: 'root'
