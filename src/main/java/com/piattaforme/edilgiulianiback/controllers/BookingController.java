@@ -5,6 +5,7 @@ import com.piattaforme.edilgiulianiback.services.PrenotazioneResponse;
 import com.piattaforme.edilgiulianiback.services.PrenotazioniService;
 import com.piattaforme.edilgiulianiback.utils.utility.Utils;
 import jakarta.validation.Valid;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatusCode;
@@ -37,9 +38,12 @@ public class BookingController {
         PrenotazioneResponse res;
         try {
             res = service.addPrenotazione(request, isAdmin, userdata.getName());
+
         }catch (ParseException e){
-            return new ResponseEntity<>(service.getErrorResponse(), HttpStatusCode.valueOf(400));
+            return ResponseEntity.ok(service.getErrorResponse(e.getMessage()));
         }
+//        if (res.nome().equalsIgnoreCase("err"))
+//            return new ResponseEntity<>(res, HttpStatusCode.valueOf(400));
         return ResponseEntity.ok(res);
     }
 

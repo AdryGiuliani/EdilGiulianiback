@@ -17,6 +17,6 @@ public @Data class Mezzo {
     private float dailyPrice;
     private boolean available;
 
-    @OneToMany(mappedBy = "mezzo")
-    private List<SubPrenotazione> prenotazioni;
+//    @OneToMany(mappedBy = "mezzo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<SubPrenotazione> prenotazioni;
 }

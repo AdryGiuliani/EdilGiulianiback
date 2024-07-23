@@ -52,6 +52,7 @@ public class PrenotazioniAssembler {
             sp.setMezzo(repoMezzi.findById(sub.getIdmezzo()));
             sp.setGiorni(convertToBookingDays(sub.getIntervals()));
             sp.setLastDay(sp.getGiorni().getLast().getGiorno());
+            res.add(sp);
         }
         return res;
     }
@@ -88,16 +89,21 @@ public class PrenotazioniAssembler {
 
     private Interval isoToInterval(IsoInterval iso) throws ParseException {
         Date start = ISO8601Utils.parse(iso.getStart(),new ParsePosition(0));
-        Date end = ISO8601Utils.parse(iso.getStart(), new ParsePosition(0));
+        Date end = ISO8601Utils.parse(iso.getEnd(), new ParsePosition(0));
+        System.out.println("start "+ start);
+        System.out.println("fine "+ end);
+
         if (start.after(end) || start.equals(end)) throw new ParseException("Orari non corretti", 0);
         Calendar cstart = Calendar.getInstance();
         cstart.setTime(start);
         Calendar cend = Calendar.getInstance();
         cend.setTime(end);
         if (cstart.get(Calendar.HOUR_OF_DAY) < 7 || cstart.get(Calendar.HOUR_OF_DAY)>= 16
-        || cend.get(Calendar.HOUR_OF_DAY) < 7 || cend.get(Calendar.HOUR_OF_DAY)>= 16 ||
+        || cend.get(Calendar.HOUR_OF_DAY) <= 7 || cend.get(Calendar.HOUR_OF_DAY)> 16 ||
                 cstart.get(Calendar.YEAR) != cend.get(Calendar.YEAR) || cstart.get(Calendar.DAY_OF_YEAR) != cend.get(Calendar.DAY_OF_YEAR)||
-        cstart.get(Calendar.DAY_OF_WEEK) >= 6 ) throw new ParseException("Orari non corretti", 0);
+        cstart.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || cstart.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
+                cstart.get(Calendar.MONTH) == Calendar.AUGUST
+        ) throw new ParseException("Orari non corretti", 0);
 
         cstart.set(Calendar.MINUTE, 0);
         cstart.set(Calendar.SECOND, 0);
@@ -114,8 +120,8 @@ public class PrenotazioniAssembler {
         return i;
     }
 
-    public PrenotazioneResponse genErrorResponse() {
-        return  new PrenotazioneResponse("Err", "0", "0", "0", new ArrayList<>(), 0);
+    public PrenotazioneResponse genErrorResponse(String errmex) {
+        return  new PrenotazioneResponse("Err", "0", "0", errmex, new ArrayList<>(), 0);
     }
 
     public PrenotazioneResponse genPrenotaResponse(Prenotazione save) {

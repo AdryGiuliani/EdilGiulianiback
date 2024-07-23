@@ -1,9 +1,11 @@
 package com.piattaforme.edilgiulianiback.utils.utility;
 
 
+import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 
 public class Utils {
@@ -17,7 +19,7 @@ public class Utils {
     }
 
     public static boolean isAdmin(){
-        OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         for (GrantedAuthority sa : authenticationToken.getAuthorities())
             if (sa.getAuthority().equals("ROLE_admin")){
                 return true;

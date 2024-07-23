@@ -42,31 +42,32 @@ public class PrenotazioniService {
     @Transactional
     public PrenotazioneResponse addPrenotazione(PrenotazioneRequest pr, boolean isAdmin, String userid) throws ParseException {
         Prenotazione p = assembler.generatePrenotazione(pr, userid);
-        if (!validatePrenotazione(p, isAdmin))
-            return getErrorResponse();
+        String errmex = validatePrenotazione(p, isAdmin);
+        if (!errmex.isEmpty())
+            return getErrorResponse(errmex);
 
         return assembler.genPrenotaResponse(repo.save(p));
     }
 
-    public PrenotazioneResponse getErrorResponse(){
-        return assembler.genErrorResponse();
+    public PrenotazioneResponse getErrorResponse(String mex){
+        return assembler.genErrorResponse(mex);
     }
 
-    private boolean validatePrenotazione(Prenotazione p, boolean isAdmin) {
+    private String validatePrenotazione(Prenotazione p, boolean isAdmin) {
         List<SubPrenotazione> subps = p.getSubPrenotazioni();
-        if (p.getSubPrenotazioni().isEmpty()) return false;
+        if (subps.isEmpty()) return "nessuna data/ora selezionata";
         for (SubPrenotazione sp : subps ) {
             if (
                     fuoriMargine(sp.getGiorni().getFirst().getIntervalliLavoro().getFirst().getHstart(), isAdmin)
             )
-                return false;
+                return "prenotazione non confermata: hai tempo fino al giorno lavorativo precedente h16:00";
         }
         for (SubPrenotazione sp : subps ){
             newMargin = sp.getMargineTrasporto();
             if (hasConflict(sp, getRelevantBooked(sp.getMezzo().getId())))
-                return false;
+                return "OPS qualcuno ha prenotato nelle date da te indicate";
         }
-        return true;
+        return "";
     }
 
     private boolean fuoriMargine(Date dbooking, boolean isAdmin) {
