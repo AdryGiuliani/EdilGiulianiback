@@ -1,0 +1,21 @@
+<div>
+  <div *ngIf="!hasProfile()">
+    <button class="btn btn-outline-light" (click)="gotoLogin()">Accedi</button>
+  </div>
+  <div *ngIf="hasProfile()">
+    <div class="flex flex-row align-items-center">
+      <p class="text-light me-2 mt-3">Benvenuto, {{getName()}}</p>
+      <div class="nav-item dropstart">
+        <button class="btn btn-secondary bg-transparent border-transparent hover:surface-overlay" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+          <i class="bi bi-three-dots-vertical text-color-secondary text-2xl" ></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li class="mx-2"><a class="dropdown-item" routerLink="/prenotazioni">Le tue prenotazioni</a></li>
+          <li class="mx-5"><button class="dropdown-item bg-danger-subtle" (click)="logout()">Logout<i class="fa-solid fa-right-from-bracket ps-2"></i></button></li>
+          <li *ngIf="isAdmin()">Modifica Mezzi</li>
+          <li *ngIf="isAdmin()">Consulta Prenotazioni</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
