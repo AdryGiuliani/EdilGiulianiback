@@ -13,7 +13,6 @@ import com.piattaforme.edilgiulianiback.repository.RepoSubPrenotazioni;
 import com.piattaforme.edilgiulianiback.utils.utility.IsoIntervalConverter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +44,9 @@ public class PrenotazioniService {
         String errmex = validatePrenotazione(p, isAdmin);
         if (!errmex.isEmpty())
             return getErrorResponse(errmex);
-
-        return assembler.genPrenotaResponse(repo.save(p));
+        long id =repo.save(p).getId();
+        p.setId(id);
+        return assembler.genPrenotaResponse(p);
     }
 
     public PrenotazioneResponse getErrorResponse(String mex){
@@ -151,5 +151,26 @@ public class PrenotazioniService {
             }
         }
         return res.keySet().stream().toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PrenotazioneResponse> getMyBookings(String name) {
+        val res = new ArrayList<PrenotazioneResponse>();
+        repo.findAllByClienteIDOrderByDataCreazioneDesc(name).forEach(
+                prenotazione -> {
+                    res.add(assembler.genPrenotaResponse(prenotazione));
+                }
+        );
+        return res;
+    }
+
+
+
+    public boolean deleteP(Long id, String name, boolean admin) {
+        if (admin){
+            repo.deleteById(id);
+            return true;
+        }
+        return repo.deleteByIdAndClienteID(id,name);
     }
 }

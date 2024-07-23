@@ -10,7 +10,6 @@ import com.piattaforme.edilgiulianiback.entities.Prenotazione;
 import com.piattaforme.edilgiulianiback.entities.SubPrenotazione;
 import com.piattaforme.edilgiulianiback.repository.RepoMezzi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -49,7 +48,7 @@ public class PrenotazioniAssembler {
         for (SubBooking sub : subBookings){
             SubPrenotazione sp = new SubPrenotazione();
             sp.setMargineTrasporto(trasporto);
-            sp.setMezzo(repoMezzi.findById(sub.getIdmezzo()));
+            sp.setMezzo(repoMezzi.findById(sub.getMezzo().getId()));
             sp.setGiorni(convertToBookingDays(sub.getIntervals()));
             sp.setLastDay(sp.getGiorni().getLast().getGiorno());
             res.add(sp);
@@ -121,17 +120,19 @@ public class PrenotazioniAssembler {
     }
 
     public PrenotazioneResponse genErrorResponse(String errmex) {
-        return  new PrenotazioneResponse("Err", "0", "0", errmex, new ArrayList<>(), 0);
+        return  new PrenotazioneResponse(0,"Err", "0", "0", errmex, new ArrayList<>(), 0, "");
     }
 
     public PrenotazioneResponse genPrenotaResponse(Prenotazione save) {
         return new PrenotazioneResponse(
+                save.getId(),
                 save.getNome(),
                 save.getIndirizzo(),
                 save.getCAP(),
                 save.getDescrizione(),
                 toSubBooking(save.getSubPrenotazioni()),
-                save.getPrezzoStimato()
+                save.getPrezzoStimato(),
+                ISO8601Utils.format(save.getDataCreazione())
         );
     }
 
@@ -139,8 +140,9 @@ public class PrenotazioniAssembler {
         List<SubBooking> res = new ArrayList<>();
         for (SubPrenotazione sp : subPrenotazioni){
             SubBooking sb = new SubBooking();
-            sb.setIdmezzo(sp.getMezzo().getId());
+            sb.setMezzo(sp.getMezzo());
             sb.setIntervals(toIsoIntervals(sp.getGiorni()));
+            res.add(sb);
         }
         return res;
     }
@@ -152,6 +154,7 @@ public class PrenotazioniAssembler {
                 IsoInterval iso = new IsoInterval();
                 iso.setStart(ISO8601Utils.format(i.getHstart()));
                 iso.setEnd(ISO8601Utils.format(i.getHfine()));
+                res.add(iso);
             }
         }
         return res;

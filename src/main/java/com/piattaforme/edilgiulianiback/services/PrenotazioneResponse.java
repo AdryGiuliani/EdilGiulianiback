@@ -9,6 +9,9 @@ import java.util.List;
 public record PrenotazioneResponse(
         @NotNull
         @NotEmpty
+        long id,
+        @NotNull
+        @NotEmpty
         String nome,
         @NotNull
         @NotEmpty
@@ -20,7 +23,11 @@ public record PrenotazioneResponse(
         @NotEmpty
         String descrizione,
         @NotNull
+        @NotEmpty
         List<SubBooking> subB,
         @NotNull
-        float prezzostimato
+        float prezzostimato,
+        @NotNull
+        @NotEmpty
+        String dataCreazione
 ){}

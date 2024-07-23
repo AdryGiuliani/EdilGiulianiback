@@ -5,15 +5,12 @@ import com.piattaforme.edilgiulianiback.services.PrenotazioneResponse;
 import com.piattaforme.edilgiulianiback.services.PrenotazioniService;
 import com.piattaforme.edilgiulianiback.utils.utility.Utils;
 import jakarta.validation.Valid;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -66,5 +63,21 @@ public class BookingController {
         return ResponseEntity.ok(service.getPrenotazioniMezzoHours(idmezzo,day));
     }
 
+
+    @GetMapping("/mybookings")
+    @PreAuthorize("hasRole('ROLE_user')")
+    public ResponseEntity<List<PrenotazioneResponse>> getMyBookings(
+            Authentication userdata
+    ){
+        return ResponseEntity.ok(service.getMyBookings(userdata.getName()));
+    }
+
+    @PostMapping("/deleteP")
+    @PreAuthorize("hasRole('ROLE_user')")
+    public ResponseEntity<Boolean> deleteP(
+            @RequestParam(name = "idp") long idp,
+            Authentication userdata){
+        return ResponseEntity.ok(service.deleteP(idp,userdata.getName(), Utils.isAdmin()));
+    }
 
 }
