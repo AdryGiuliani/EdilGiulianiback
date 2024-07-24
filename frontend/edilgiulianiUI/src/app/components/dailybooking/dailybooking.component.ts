@@ -3,7 +3,7 @@ import {BookingControllerService} from "../../services/services/booking-controll
 import {PrenotazioneRequest} from "../../services/models/prenotazione-request";
 import {SubBooking} from "../../services/models/sub-booking";
 import {NgForOf, NgIf} from "@angular/common";
-import {Mezzo, PrenotazioneResponse} from '../../services/models';
+import {Mezzo, PrenotazioneResp} from '../../services/models';
 import {FieldsetModule} from "primeng/fieldset";
 import {MezzoControllerService} from "../../services/services/mezzo-controller.service";
 import {MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
@@ -17,6 +17,7 @@ import {DaySubBooking, daysubTOsub} from "./DaySubBooking";
 import {DialogModule} from "primeng/dialog";
 import {RiepilogoPrenotazioneComponent} from "../riepilogo-prenotazione/riepilogo-prenotazione.component";
 import {ErrordialogComponent} from "../errordialog/errordialog.component";
+import {CardModule} from "primeng/card";
 
 
 @Component({
@@ -41,6 +42,7 @@ import {ErrordialogComponent} from "../errordialog/errordialog.component";
     DialogModule,
     RiepilogoPrenotazioneComponent,
     ErrordialogComponent,
+    CardModule,
   ],
   templateUrl: './dailybooking.component.html',
   styleUrl: './dailybooking.component.css'
@@ -54,9 +56,9 @@ export class DailybookingComponent implements OnInit {
   protected mezziselezionati: Mezzo[] = [];
   visible = false;
 
-  protected response: PrenotazioneResponse | undefined;
+  protected response: PrenotazioneResp | undefined;
   protected daysMezzoOccupied: Map<number, Date[]> = new Map();
-  protected subBooks: Map<number, DaySubBooking> = new Map();
+  protected subBooks: DaySubBooking[] = [];
   protected req: PrenotazioneRequest = new class implements PrenotazioneRequest {
     cap: string = "";
     descrizione: string = "";
@@ -81,7 +83,7 @@ export class DailybookingComponent implements OnInit {
   }
 
   getOccupate(mezzo: Mezzo, event: MatOptionSelectionChange<Mezzo>) {
-    if (event.source.value != null) {
+    if (event.source.selected) {
       this.bookingservice.getBookedDays({
         idmezzo: mezzo.id!!
       }).subscribe({
@@ -94,9 +96,9 @@ export class DailybookingComponent implements OnInit {
         mezzo = mezzo;
         giorni = [];
       };
-      this.subBooks.set(mezzo.id!!, s)
+      this.subBooks.push(s)
     } else {
-      this.subBooks.delete(mezzo.id!!)
+      this.subBooks = this.subBooks.filter(sub => sub.mezzo.id != mezzo.id)
     }
   }
 

@@ -1,56 +1,52 @@
+<div class="w-fit">
+  <div class="flex flex-row justify-content-between">
+    <p-card header="Prenota">
+      <div class=" flex flex-column justify-content-center w-20rem">
+        <mat-form-field>
+          <input matInput placeholder="Titolo prenotazione" minlength="50" required [(ngModel)]="req.nome">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="CAP" maxlength="5" type="number" required [(ngModel)]="req.cap">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Indirizzo" maxlength="30" required [(ngModel)]="req.indirizzo">
+        </mat-form-field>
+        <mat-form-field class="h-10rem">
+      <textarea matInput placeholder="Inserisci una descrizione del lavoro" maxlength="1000" required
+                [(ngModel)]="req.descrizione"></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Mezzo scelto</mat-label>
+          <mat-select [(ngModel)]="mezziselezionati" multiple>
+            @for (mezzo of mezziDisponibili; track mezzo) {
+              <mat-option [value]="mezzo" (onSelectionChange)="getOccupate(mezzo, $event)">{{ mezzo.nome }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row justify-content-end">
+        <p-button label="Prenota" [text]="true" [raised]="true" (click)="confermaPrenotazione()"></p-button>
+      </div>
+    </p-card>
+    <div class="w-4rem"></div>
 
-<div class="flex flex-column justify-content-start w-50">
-  <div class=" flex flex-column justify-content-start w-50">
-    <mat-form-field>
-      <input matInput placeholder="Titolo prenotazione" maxlength="50" required [(ngModel)]="req.nome">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="CAP" maxlength="5" type="number"  required [(ngModel)]="req.cap">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Indirizzo" maxlength="30"   required [(ngModel)]="req.indirizzo">
-    </mat-form-field>
-    <mat-form-field>
-      <textarea matInput placeholder="Inserisci una descrizione del lavoro" maxlength="1000" required [(ngModel)]="req.descrizione"></textarea>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Mezzo scelto</mat-label>
-      <mat-select [(ngModel)]="mezziselezionati" multiple>
-        @for (mezzo of mezziDisponibili; track mezzo) {
-          <mat-option [value]="mezzo" (onSelectionChange)="getOccupate(mezzo, $event)">{{mezzo.nome}}</mat-option>
+      <div class="flex flex-auto" style="width: fit-content">
+        @for (booking of subBooks; track booking) {
+          <p-card header="Mezzo: {{booking.mezzo.nome}}" class="p-5">
+            <div>
+              <p-calendar selectionMode="multiple" [minDate]="getNextDate()"
+                          [firstDayOfWeek]="1" [disabledDates]="daysMezzoOccupied.get(booking.mezzo.id!!)!!"
+                          [inline]="true" [disabledDays]="[0,6]" [readonlyInput]="true"
+                          [(ngModel)]="booking.giorni"
+              />
+            </div>
+          </p-card>
         }
-      </mat-select>
-    </mat-form-field>
+      </div>
+
   </div>
 
-  <div class="flex" style="width: fit-content">
-    @for (booking of subBooks.values(); track booking){
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>
-            {{booking.mezzo.nome}}
-          </mat-card-title>
-        </mat-card-header>
-        <div>
-          <div *ngIf="daysMezzoOccupied.get(booking.mezzo.id!!)?.length== 0">
-            sempre libero
-          </div>
-          @for (data of daysMezzoOccupied.get(booking.mezzo.id!!); track data){
-            {{data}}
-          }
-          @for (data of booking.giorni; track data){
-            {{data.toLocaleDateString()}}
-          }
-          <p-calendar selectionMode="multiple" [minDate]="getNextDate()"
-                      [firstDayOfWeek]="1" [disabledDates]="daysMezzoOccupied.get(booking.mezzo.id!!)!!"
-                      [inline]="true" [disabledDays]="[0,6]" [readonlyInput]="true"
-                      [(ngModel)]="booking.giorni"
-                      />
-        </div>
-      </mat-card>
 
-    }
-  </div>
 </div>
 <p-dialog header="Prenotazione effettuata" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
   <span class="p-text-secondary block mb-5">Riepilogo:</span>
@@ -61,7 +57,6 @@
   <app-errordialog [message]="errMessage"></app-errordialog>
 </p-dialog>
 
-<div class="flex flex-row justify-content-end">
-  <p-button label="Prenota" [text]="true" [raised]="true" (click)="confermaPrenotazione()"></p-button>
-</div>
+
+
 

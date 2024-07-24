@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {PrenotazioneResponse} from "../../services/models/prenotazione-response";
+import {PrenotazioneResp} from "../../services/models/prenotazione-resp";
 
 @Component({
   selector: 'app-riepilogo-prenotazione',
@@ -11,5 +11,5 @@ import {PrenotazioneResponse} from "../../services/models/prenotazione-response"
 export class RiepilogoPrenotazioneComponent {
 
   @Input()
-  response: PrenotazioneResponse | undefined
+  response: PrenotazioneResp | undefined
 }

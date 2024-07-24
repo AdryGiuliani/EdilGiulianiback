@@ -1,12 +1,11 @@
-package com.piattaforme.edilgiulianiback.services;
+package com.piattaforme.edilgiulianiback.dtos;
 
-import com.piattaforme.edilgiulianiback.controllers.SubBooking;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record PrenotazioneResponse(
+public record PrenotazioneResp(
         @NotNull
         @NotEmpty
         long id,

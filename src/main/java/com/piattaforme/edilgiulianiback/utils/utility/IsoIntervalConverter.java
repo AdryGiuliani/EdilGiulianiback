@@ -1,8 +1,7 @@
 package com.piattaforme.edilgiulianiback.utils.utility;
 
 import com.nimbusds.jose.shaded.gson.internal.bind.util.ISO8601Utils;
-import com.piattaforme.edilgiulianiback.controllers.IsoInterval;
-import com.piattaforme.edilgiulianiback.entities.BookingDay;
+import com.piattaforme.edilgiulianiback.dtos.IsoInterval;
 import com.piattaforme.edilgiulianiback.entities.Interval;
 
 import java.text.ParseException;

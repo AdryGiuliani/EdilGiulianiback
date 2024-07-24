@@ -1,9 +1,10 @@
 package com.piattaforme.edilgiulianiback.services;
 
 import com.nimbusds.jose.shaded.gson.internal.bind.util.ISO8601Utils;
-import com.piattaforme.edilgiulianiback.controllers.IsoInterval;
-import com.piattaforme.edilgiulianiback.controllers.PrenotazioneRequest;
-import com.piattaforme.edilgiulianiback.controllers.SubBooking;
+import com.piattaforme.edilgiulianiback.dtos.IsoInterval;
+import com.piattaforme.edilgiulianiback.dtos.PrenotazioneRequest;
+import com.piattaforme.edilgiulianiback.dtos.PrenotazioneResp;
+import com.piattaforme.edilgiulianiback.dtos.SubBooking;
 import com.piattaforme.edilgiulianiback.entities.BookingDay;
 import com.piattaforme.edilgiulianiback.entities.Interval;
 import com.piattaforme.edilgiulianiback.entities.Prenotazione;
@@ -119,12 +120,12 @@ public class PrenotazioniAssembler {
         return i;
     }
 
-    public PrenotazioneResponse genErrorResponse(String errmex) {
-        return  new PrenotazioneResponse(0,"Err", "0", "0", errmex, new ArrayList<>(), 0, "");
+    public PrenotazioneResp genErrorResponse(String errmex) {
+        return  new PrenotazioneResp(0,"Err", "0", "0", errmex, new ArrayList<>(), 0, "");
     }
 
-    public PrenotazioneResponse genPrenotaResponse(Prenotazione save) {
-        return new PrenotazioneResponse(
+    public PrenotazioneResp genPrenotaResponse(Prenotazione save) {
+        return new PrenotazioneResp(
                 save.getId(),
                 save.getNome(),
                 save.getIndirizzo(),

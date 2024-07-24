@@ -1,5 +1,11 @@
-<p>prenotazione-form works!</p>
-<div class="flex flex-row justify-content-center">
-  <a routerLink="/daily">A giornata</a>
-  <a routerLink="/hourly">Ad ora</a>
-</div>
+<p-card header="Info prima di prenotare">
+  <mat-label>
+    Prima di prenotare la invitiamo a consultare alle seguenti condizioni:<br>
+    - Il servizio è disponibile dalle 7:00 alle 16:00 dal lunedì al venerdì<br>
+    - È possibile prenotare/cancellare la prenotazione fino alle 16:00 del giorno precedente<br>
+  </mat-label>
+  <div class="flex flex-row">
+    <p-button label="Giornaliera" rounded></p-button>
+    <p-button label="Oraria"></p-button>
+  </div>
+</p-card>

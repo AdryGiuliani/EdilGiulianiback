@@ -1,4 +1,4 @@
-package com.piattaforme.edilgiulianiback.controllers;
+package com.piattaforme.edilgiulianiback.dtos;
 
 import lombok.Data;
 

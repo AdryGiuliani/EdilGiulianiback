@@ -9,7 +9,7 @@ export interface DaySubBooking{
 
 export function daysubTOsub(d : DaySubBooking ){
   let newd = new implSubBooking()
-  newd.idmezzo=d.mezzo.id
+  newd.mezzo=d.mezzo
   d.giorni.forEach(
     value => {
       let newInterval = new implISOInterval()
@@ -24,7 +24,7 @@ export function daysubTOsub(d : DaySubBooking ){
 }
 
 class implSubBooking implements SubBooking {
-  idmezzo: number | undefined = 0
+  mezzo: Mezzo | undefined
   intervals: IsoInterval[] = []
 }
 

@@ -1,10 +1,10 @@
 <body class="d-flex flex-column h-100">
 <div class="flex flex-column justify-content-center">
-  <header class="mb-8">
+  <header>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/"><img src="favicon.ico" alt=""/></a>
+        <a class="navbar-brand" routerLink="/"><img src="favicon.ico" alt="" style="width: 6rem"/></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -25,13 +25,13 @@
       </div>
     </nav>
   </header>
-  <main class="flex-shrink-0">
+  <main class="flex-shrink-0" [style.background-image]="'url(assets/bg1.png)'" style="min-height: 50rem">
     <div class="container">
-      <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
     </div>
   </main>
 
-  <footer class="footer mt-auto py-3 bg-body-tertiary">
+  <footer class="footer mt-auto py-3 bg-dark">
     <div class="container flex justify-content-center">
       <span class="text-body-secondary">Place sticky footer content here.<br><br><br><br></span>
     </div>

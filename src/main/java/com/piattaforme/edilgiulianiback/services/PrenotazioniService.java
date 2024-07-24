@@ -1,8 +1,9 @@
 package com.piattaforme.edilgiulianiback.services;
 
 import com.nimbusds.jose.shaded.gson.internal.bind.util.ISO8601Utils;
-import com.piattaforme.edilgiulianiback.controllers.IsoInterval;
-import com.piattaforme.edilgiulianiback.controllers.PrenotazioneRequest;
+import com.piattaforme.edilgiulianiback.dtos.IsoInterval;
+import com.piattaforme.edilgiulianiback.dtos.PrenotazioneRequest;
+import com.piattaforme.edilgiulianiback.dtos.PrenotazioneResp;
 import com.piattaforme.edilgiulianiback.entities.BookingDay;
 import com.piattaforme.edilgiulianiback.entities.Interval;
 import com.piattaforme.edilgiulianiback.entities.Prenotazione;
@@ -39,7 +40,7 @@ public class PrenotazioniService {
     private long newMargin;
 
     @Transactional
-    public PrenotazioneResponse addPrenotazione(PrenotazioneRequest pr, boolean isAdmin, String userid) throws ParseException {
+    public PrenotazioneResp addPrenotazione(PrenotazioneRequest pr, boolean isAdmin, String userid) throws ParseException {
         Prenotazione p = assembler.generatePrenotazione(pr, userid);
         String errmex = validatePrenotazione(p, isAdmin);
         if (!errmex.isEmpty())
@@ -49,7 +50,7 @@ public class PrenotazioniService {
         return assembler.genPrenotaResponse(p);
     }
 
-    public PrenotazioneResponse getErrorResponse(String mex){
+    public PrenotazioneResp getErrorResponse(String mex){
         return assembler.genErrorResponse(mex);
     }
 
@@ -154,8 +155,8 @@ public class PrenotazioniService {
     }
 
     @Transactional(readOnly = true)
-    public List<PrenotazioneResponse> getMyBookings(String name) {
-        val res = new ArrayList<PrenotazioneResponse>();
+    public List<PrenotazioneResp> getMyBookings(String name) {
+        val res = new ArrayList<PrenotazioneResp>();
         repo.findAllByClienteIDOrderByDataCreazioneDesc(name).forEach(
                 prenotazione -> {
                     res.add(assembler.genPrenotaResponse(prenotazione));
@@ -166,11 +167,18 @@ public class PrenotazioniService {
 
 
 
-    public boolean deleteP(Long id, String name, boolean admin) {
-        if (admin){
+    @Transactional
+    public String deleteP(Long id, String name, boolean admin) {
+        Prenotazione p = repo.findByIdAndClienteID(id, name);
+        if (p == null)
+            return "Prenotazione non trovata, prova ad aggiornare la pagina";
+        String err = validatePrenotazione(p, admin);
+        if (!err.isEmpty())
+            return err;
+        if (admin)
             repo.deleteById(id);
-            return true;
-        }
-        return repo.deleteByIdAndClienteID(id,name);
+        else
+            repo.deleteByIdAndClienteID(id,name);
+        return "ok";
     }
 }

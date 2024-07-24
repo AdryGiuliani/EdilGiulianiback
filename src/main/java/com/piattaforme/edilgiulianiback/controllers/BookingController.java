@@ -1,7 +1,10 @@
 package com.piattaforme.edilgiulianiback.controllers;
 
 
-import com.piattaforme.edilgiulianiback.services.PrenotazioneResponse;
+import com.piattaforme.edilgiulianiback.dtos.IsoInterval;
+import com.piattaforme.edilgiulianiback.dtos.MexWrapper;
+import com.piattaforme.edilgiulianiback.dtos.PrenotazioneRequest;
+import com.piattaforme.edilgiulianiback.dtos.PrenotazioneResp;
 import com.piattaforme.edilgiulianiback.services.PrenotazioniService;
 import com.piattaforme.edilgiulianiback.utils.utility.Utils;
 import jakarta.validation.Valid;
@@ -27,12 +30,12 @@ public class BookingController {
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('ROLE_user')")
-    public ResponseEntity<PrenotazioneResponse> prenota(
+    public ResponseEntity<PrenotazioneResp> prenota(
             @Valid @RequestBody PrenotazioneRequest request,
             Authentication userdata
     ){
         boolean isAdmin = Utils.isAdmin();
-        PrenotazioneResponse res;
+        PrenotazioneResp res;
         try {
             res = service.addPrenotazione(request, isAdmin, userdata.getName());
 
@@ -66,7 +69,7 @@ public class BookingController {
 
     @GetMapping("/mybookings")
     @PreAuthorize("hasRole('ROLE_user')")
-    public ResponseEntity<List<PrenotazioneResponse>> getMyBookings(
+    public ResponseEntity<List<PrenotazioneResp>> getMyBookings(
             Authentication userdata
     ){
         return ResponseEntity.ok(service.getMyBookings(userdata.getName()));
@@ -74,10 +77,10 @@ public class BookingController {
 
     @PostMapping("/deleteP")
     @PreAuthorize("hasRole('ROLE_user')")
-    public ResponseEntity<Boolean> deleteP(
+    public ResponseEntity<MexWrapper> deleteP(
             @RequestParam(name = "idp") long idp,
             Authentication userdata){
-        return ResponseEntity.ok(service.deleteP(idp,userdata.getName(), Utils.isAdmin()));
+        return ResponseEntity.ok(new MexWrapper(service.deleteP(idp,userdata.getName(), Utils.isAdmin())));
     }
 
 }

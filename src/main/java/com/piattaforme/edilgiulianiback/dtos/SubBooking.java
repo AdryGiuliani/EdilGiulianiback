@@ -1,4 +1,4 @@
-package com.piattaforme.edilgiulianiback.controllers;
+package com.piattaforme.edilgiulianiback.dtos;
 
 import com.piattaforme.edilgiulianiback.entities.Mezzo;
 import lombok.Data;

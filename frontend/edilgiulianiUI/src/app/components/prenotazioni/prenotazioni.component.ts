@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {MatCard} from "@angular/material/card";
 import {CardModule} from "primeng/card";
 import {BookingControllerService} from "../../services/services/booking-controller.service";
-import {PrenotazioneResponse} from "../../services/models/prenotazione-response";
 import {PrenotazioneDisplayComponent} from "../prenotazione-display/prenotazione-display.component";
 import {TableModule} from "primeng/table";
 import {Button} from "primeng/button";
@@ -12,7 +11,15 @@ import {DialogModule} from "primeng/dialog";
 import {ErrordialogComponent} from "../errordialog/errordialog.component";
 import {MatLabel} from "@angular/material/form-field";
 import {IsoInterval} from "../../services/models/iso-interval";
-
+import {ConfirmationService,MessageService} from "primeng/api";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {index} from "../../services/fn/guest-controller";
+import {PrenotazioneResp} from "../../services/models/prenotazione-resp";
+import {ToastModule} from "primeng/toast";
+import {FormsModule} from "@angular/forms";
+import {NgIf} from "@angular/common";
+import {RouterLink} from "@angular/router";
+import {MexWrapper} from "../../services/models/mex-wrapper";
 @Component({
   selector: 'app-prenotazioni',
   standalone: true,
@@ -29,17 +36,26 @@ import {IsoInterval} from "../../services/models/iso-interval";
     MatIconButton,
     DialogModule,
     ErrordialogComponent,
-    MatLabel
+    MatLabel,
+    ConfirmDialogModule,
+    ToastModule,
+    FormsModule,
+    NgIf,
+    RouterLink
   ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './prenotazioni.component.html',
   styleUrl: './prenotazioni.component.css'
 })
 export class PrenotazioniComponent implements OnInit{
   title = 'Prenotazioni';
   showInfo = false;
-  selPrenotazione : PrenotazioneResponse | undefined
-  prenotazioni: PrenotazioneResponse[] = [];
-  constructor(private bookingService : BookingControllerService) {
+  empty= signal(true);
+  selPrenotazione : PrenotazioneResp | undefined
+  prenotazioni: PrenotazioneResp[] = [];
+  constructor(private bookingService : BookingControllerService,
+              private confirmationService: ConfirmationService,
+              private messageService: MessageService) {
   }
   ngOnInit(): void {
     this.getAllPrenotazioniUtente()
@@ -48,7 +64,7 @@ export class PrenotazioniComponent implements OnInit{
   getAllPrenotazioniUtente(){
     this.bookingService.getMyBookings().subscribe(
       {
-        next: value => this.prenotazioni = value
+        next: value =>{ this.prenotazioni = value; this.empty.set( this.prenotazioni.length==0)}
       }
     )
   }
@@ -68,8 +84,48 @@ export class PrenotazioniComponent implements OnInit{
       return "Da: "+dstart.toLocaleTimeString()+" A: "+dfine.toLocaleTimeString()
   }
 
-  showInfos(prenotazione: PrenotazioneResponse) {
+  showInfos(prenotazione: PrenotazioneResp) {
     this.selPrenotazione = prenotazione;
     this.showInfo=true;
+  }
+
+  delete(prenotazione: any, event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Sei sicuro di voler eliminare la prenotazione: ${prenotazione.nome} ?`,
+      header: 'Conferma',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon:"none",
+      acceptLabel:"SI",
+      rejectLabel:"NO",
+      rejectIcon:"none",
+      rejectButtonStyleClass:"p-button-text",
+      accept: () => {
+        this.bookingService.deleteP({
+          idp: prenotazione.id
+        }).subscribe({
+          next: (value:MexWrapper) => {
+            if (value.mex != undefined && value.mex.toLowerCase() == 'ok'){
+              let i = this.prenotazioni.indexOf(prenotazione);
+              if (i>-1){
+                this.prenotazioni.splice(i,1);
+                this.empty.set( this.prenotazioni.length==0);
+                this.prenotazioni=[...this.prenotazioni];
+              }
+              // Rimuove 1 elemento a partire dall'indice specificato
+              this.messageService.add({ severity: 'info', summary: 'Operazione completata', detail: 'prenotazione cancellata' });
+            }
+            else{
+              this.messageService.add({ severity: 'error', summary: 'Errore', detail: value.toString()});
+            }
+          }
+        })
+      },
+      reject: () => {}
+    });
+  }
+
+  toggle() {
+    this.empty.update(value => !value)
   }
 }

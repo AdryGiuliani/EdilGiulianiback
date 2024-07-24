@@ -12,7 +12,8 @@ import java.util.List;
 public interface RepoPrenotazioni extends JpaRepository<Prenotazione, Long> {
     List<Prenotazione> findAllByOrderByDataCreazioneDesc();
     List<Prenotazione> findAllByClienteIDOrderByDataCreazioneDesc(String id);
-    boolean deleteByIdAndClienteID(long id, String clientId);
+    void deleteByIdAndClienteID(long id, String clientId);
+    Prenotazione findByIdAndClienteID(long id, String clientId);
     Prenotazione findById(long id);
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     @Override
