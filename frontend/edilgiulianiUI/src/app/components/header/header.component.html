@@ -10,8 +10,8 @@
           <i class="bi bi-three-dots-vertical text-color-secondary text-2xl" ></i>
         </button>
         <ul class="dropdown-menu">
-          <li class="mx-2"><a class="dropdown-item" routerLink="/prenotazioni">Le tue prenotazioni</a></li>
-          <li class="mx-5"><button class="dropdown-item bg-danger-subtle" (click)="logout()">Logout<i class="fa-solid fa-right-from-bracket ps-2"></i></button></li>
+          <li class="mx-0"><a class="dropdown-item bg-primary-50 hover:bg-primary" routerLink="/prenotazioni">Le tue prenotazioni</a></li>
+          <li class="mx-0"><button class="dropdown-item bg-red-50 hover:bg-red-300" (click)="logout()">Logout<i class="fa-solid fa-right-from-bracket ps-2"></i></button></li>
           <li *ngIf="isAdmin()">Modifica Mezzi</li>
           <li *ngIf="isAdmin()">Consulta Prenotazioni</li>
         </ul>

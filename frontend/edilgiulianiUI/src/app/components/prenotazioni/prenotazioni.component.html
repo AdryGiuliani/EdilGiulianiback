@@ -11,7 +11,7 @@
   @if(empty()){
     <mat-label>Nessuna prenotazione effettuata, <a routerLink="/prenota">prenota ora</a></mat-label>
   } @else {
-    <p-table [value]="prenotazioni" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
+    <p-table [value]="prenotazioni" [tableStyle]="{ 'min-width': '50rem' }" [rows]="10" [paginator]="paginationNeeded()">
       <ng-template pTemplate="header">
         <tr>
           <th>Codice</th>
@@ -38,7 +38,7 @@
                 <mat-icon>info_outline</mat-icon>
               </button>
               <div style="width: 1rem"></div>
-              <button mat-icon-button class="hover:bg-red-100" (click)="delete(prenotazione,$event)">
+              <button mat-icon-button class="hover:bg-red-100" [disabled]="checkTime(prenotazione)" (click)="delete(prenotazione,$event)">
                 <mat-icon>delete_forever</mat-icon>
               </button>
             </div>
@@ -52,19 +52,9 @@
 
 
 </p-card>
-<p-dialog [header]="selPrenotazione?.nome" [modal]="true" [(visible)]="showInfo" [style]="{width: '100'}">
-  <div class="flex flex-column justify-content-start">
-    @for (sub of selPrenotazione?.subB; track sub) {
-      <mat-label>Mezzo prenotato:</mat-label>
-      {{ sub.mezzo?.nome }}
-      <mat-label>Date scelte:</mat-label>
-      @for (interval of sub.intervals; track interval) {
-        <div class="flex flex-row justify-content-between">
-          <div>{{ getDate(interval.start!!) }}</div>
-          <div>{{ displayInterval(interval) }}</div>
-        </div>
-      }
-    }
+<p-dialog header="INFO" [modal]="true" [(visible)]="showInfo" [style]="{width: '25rem'}">
+  <div>
+    <app-riepilogo-prenotazione [response]="selPrenotazione"></app-riepilogo-prenotazione>
   </div>
 </p-dialog>
 

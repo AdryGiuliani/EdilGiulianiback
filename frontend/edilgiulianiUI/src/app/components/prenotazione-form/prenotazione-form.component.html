@@ -3,9 +3,10 @@
     Prima di prenotare la invitiamo a consultare alle seguenti condizioni:<br>
     - Il servizio è disponibile dalle 7:00 alle 16:00 dal lunedì al venerdì<br>
     - È possibile prenotare/cancellare la prenotazione fino alle 16:00 del giorno precedente<br>
+    - Il prezzo stimato è calcolato partendo da un prezzo minimo, orario oppure giornaliero (7:00/16:00)
   </mat-label>
-  <div class="flex flex-row">
-    <p-button label="Giornaliera" rounded></p-button>
-    <p-button label="Oraria"></p-button>
+  <div class="flex flex-row justify-content-evenly">
+    <p-button label="A Giornate" icon="pi pi-calendar" routerLink="/daily" [raised]="true" [text]="true"></p-button>
+    <p-button label="Ad Ore" icon="pi pi-clock" routerLink="/hourly" [raised]="true" [text]="true"></p-button>
   </div>
 </p-card>

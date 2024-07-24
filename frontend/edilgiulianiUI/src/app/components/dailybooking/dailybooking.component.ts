@@ -18,6 +18,7 @@ import {DialogModule} from "primeng/dialog";
 import {RiepilogoPrenotazioneComponent} from "../riepilogo-prenotazione/riepilogo-prenotazione.component";
 import {ErrordialogComponent} from "../errordialog/errordialog.component";
 import {CardModule} from "primeng/card";
+import {RouterLink} from "@angular/router";
 
 
 @Component({
@@ -43,6 +44,7 @@ import {CardModule} from "primeng/card";
     RiepilogoPrenotazioneComponent,
     ErrordialogComponent,
     CardModule,
+    RouterLink,
   ],
   templateUrl: './dailybooking.component.html',
   styleUrl: './dailybooking.component.css'

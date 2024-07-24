@@ -1,3 +1,29 @@
-<p>{{response?.descrizione}}</p>
-<p>{{response?.nome}}</p>
+<div>
+  <mat-label>Nome Prenotazione: {{response?.nome}}</mat-label><br>
+  <mat-label>Cap e Indirizzo: {{response?.cap}} {{response?.indirizzo}}</mat-label><br>
+  <mat-label>Data creazione: {{getDateFormattedd()}}</mat-label><br>
+  <mat-label>Costo stimato:  {{response?.prezzostimato}}€</mat-label><br>
+  <mat-label>Descrizione:</mat-label><br>
+  <textarea matInput [disabled]="true" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" style="width: 20rem">
+    {{response?.descrizione!!}}
+  </textarea>
+  <br>
+
+  <div class="flex flex-column justify-content-start mt-1">
+    <mat-label class="text-xl font-bold mb-1">Mezzi prenotati e relative date:</mat-label>
+    @for (sub of response?.subB; track sub) {
+      <div class="ms-2">
+      <mat-label>Mezzo prenotato: {{ sub.mezzo?.nome }}</mat-label><br>
+      <mat-label>Date scelte:</mat-label>
+      @for (interval of sub.intervals; track interval) {
+        <div class="flex flex-row justify-content-between ms-2">
+          <div>{{ getDate(interval.start!!) }}</div>
+          <div>{{ displayInterval(interval) }}</div>
+        </div><br>
+      }
+      </div>
+      <mat-divider ></mat-divider>
+    }
+  </div>
+</div>
 

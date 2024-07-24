@@ -2,7 +2,6 @@ import {Component, OnInit, signal} from '@angular/core';
 import {MatCard} from "@angular/material/card";
 import {CardModule} from "primeng/card";
 import {BookingControllerService} from "../../services/services/booking-controller.service";
-import {PrenotazioneDisplayComponent} from "../prenotazione-display/prenotazione-display.component";
 import {TableModule} from "primeng/table";
 import {Button} from "primeng/button";
 import {MatButton, MatFabButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
@@ -10,23 +9,22 @@ import {MatIcon} from "@angular/material/icon";
 import {DialogModule} from "primeng/dialog";
 import {ErrordialogComponent} from "../errordialog/errordialog.component";
 import {MatLabel} from "@angular/material/form-field";
-import {IsoInterval} from "../../services/models/iso-interval";
-import {ConfirmationService,MessageService} from "primeng/api";
+import {ConfirmationService, MessageService} from "primeng/api";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
-import {index} from "../../services/fn/guest-controller";
 import {PrenotazioneResp} from "../../services/models/prenotazione-resp";
 import {ToastModule} from "primeng/toast";
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {MexWrapper} from "../../services/models/mex-wrapper";
+import {RiepilogoPrenotazioneComponent} from "../riepilogo-prenotazione/riepilogo-prenotazione.component";
+
 @Component({
   selector: 'app-prenotazioni',
   standalone: true,
   imports: [
     MatCard,
     CardModule,
-    PrenotazioneDisplayComponent,
     TableModule,
     Button,
     MatButton,
@@ -41,7 +39,8 @@ import {MexWrapper} from "../../services/models/mex-wrapper";
     ToastModule,
     FormsModule,
     NgIf,
-    RouterLink
+    RouterLink,
+    RiepilogoPrenotazioneComponent
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './prenotazioni.component.html',
@@ -69,20 +68,6 @@ export class PrenotazioniComponent implements OnInit{
     )
   }
 
-  getDate(start : string) {
-    return new Date(start).toLocaleDateString();
-  }
-
-  displayInterval(interval: IsoInterval) {
-    let s = interval.start?.toString()
-    let f = interval.end?.toString()
-    let dstart = new Date(s!!)
-    let dfine = new Date(f!!)
-    if (dfine.getHours()-dstart.getHours()>=7)
-      return "Giornata intera"
-    else
-      return "Da: "+dstart.toLocaleTimeString()+" A: "+dfine.toLocaleTimeString()
-  }
 
   showInfos(prenotazione: PrenotazioneResp) {
     this.selPrenotazione = prenotazione;
@@ -127,5 +112,17 @@ export class PrenotazioniComponent implements OnInit{
 
   toggle() {
     this.empty.update(value => !value)
+  }
+
+  checkTime(p : PrenotazioneResp) {
+    let now = new Date()
+    let scadenza =  new Date(p.subB[0].intervals!![0].start!!)
+    scadenza.setDate(scadenza.getDate()-1)
+    scadenza.setHours(16)
+    return now>scadenza;
+  }
+
+  paginationNeeded() {
+    return this.prenotazioni.length>10;
   }
 }

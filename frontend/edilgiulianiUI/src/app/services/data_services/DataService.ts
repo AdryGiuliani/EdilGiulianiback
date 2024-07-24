@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { PrenotazioneResponse } from '../models';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {PrenotazioneResponse} from '../models';
 
 @Injectable()
 export class DataService {

@@ -1,2 +1,21 @@
-<p>welcome works!</p>
-<button (click)="gotoDashboard()">vai alla Dashboard</button>
+<div class="flex justify-content-center">
+  <p-card>
+    <div class="flex flex-row justify-content-center align-items-center">
+      <h1>Benvenuti</h1>
+    </div>
+    <div class="flex justify-content-center">
+      <p-galleria [value]="images" [containerStyle]="{ 'max-width': '640px'}" >
+        <ng-template let-index pTemplate="item">
+          <div>
+            <img src="assets/carousel/{{index}}.jpg" alt="" class="img-fluid">
+          </div>
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-index>
+          <div class="grid grid-nogutter justify-content-center">
+            <img src="assets/carousel/{{index}}thumbnail.jpg"  alt="" class="img-fluid"/>
+          </div>
+        </ng-template>
+      </p-galleria>
+    </div>
+  </p-card>
+</div>

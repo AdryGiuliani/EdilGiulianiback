@@ -29,8 +29,7 @@
       </div>
     </p-card>
     <div class="w-4rem"></div>
-
-      <div class="flex flex-auto" style="width: fit-content">
+      <div class="flex flex-wrap">
         @for (booking of subBooks; track booking) {
           <p-card header="Mezzo: {{booking.mezzo.nome}}" class="p-5">
             <div>
@@ -51,6 +50,7 @@
 <p-dialog header="Prenotazione effettuata" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
   <span class="p-text-secondary block mb-5">Riepilogo:</span>
   <app-riepilogo-prenotazione [response]="response"></app-riepilogo-prenotazione>
+  <mat-label>Puoi trovare tutte le tue prenotazioni da te effettuate nella sezione: <a routerLink="/prenotazioni">le mie prenotazioni</a></mat-label>
 </p-dialog>
 <p-dialog header="Errore nella prenotazione" [modal]="true" [(visible)]="showError" [style]="{width: '25rem'}">
   <span class="p-text-secondary block mb-5">Causa:</span>

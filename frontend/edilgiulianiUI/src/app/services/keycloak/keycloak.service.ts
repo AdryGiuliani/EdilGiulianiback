@@ -8,6 +8,7 @@ export class KeycloakService{
 
   private _keycloak: Keycloak | undefined;
   private _profile: KeycloakProfile | undefined;
+  requestedpage: string ='';
 
   get profile(): KeycloakProfile|undefined {
     return this._profile;
@@ -26,11 +27,12 @@ export class KeycloakService{
 
   async init(): Promise<void> {
     console.log("init keycloak service")
+    console.log(window.location.origin + this.requestedpage)
     const authenticated = await this.keycloak.init({
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
       checkLoginIframe: false,
-      redirectUri: window.location.origin + '/dashboard'
+      redirectUri: window.location.origin + '/prenotazioni'
     });
     if (authenticated){
       this._profile = (await this.keycloak?.loadUserProfile());

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ErrordialogComponent } from './errordialog.component';
+import {ErrordialogComponent} from './errordialog.component';
 
 describe('ErrordialogComponent', () => {
   let component: ErrordialogComponent;
@@ -11,7 +11,7 @@ describe('ErrordialogComponent', () => {
       imports: [ErrordialogComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(ErrordialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

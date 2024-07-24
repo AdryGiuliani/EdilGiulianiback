@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
-import {Router, RouterLink, RouterOutlet} from "@angular/router";
-import {KeycloakService} from "../../services/keycloak/keycloak.service";
+import {RouterLink, RouterOutlet} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {HeaderComponent} from "../header/header.component";
 

@@ -1,7 +1,6 @@
 package com.piattaforme.edilgiulianiback.utils.utility;
 
 
-import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
